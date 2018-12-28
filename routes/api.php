@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-
+use App\Models\Product;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -30,4 +30,20 @@ Route::get('/product', function(Request $req) {
     return $pro;
 });
 
+Route::post('/product/add', function(Request $req) {
+    $name = $req->input('name');
+    $price = $req->input('price');
+
+    $p = new Product;
+    $p->name = $name;
+    $p->original_price = $price;
+    $p->current_price = $price;
+    $p->digest = 'some digest';
+    $p->seller_id = 1;
+    $p->save();
+    return $p;
+    
+});
+
 Route::get('/product/{id}', 'ProductController@show');
+Route::get('/category/{id}', 'ProductController@show');

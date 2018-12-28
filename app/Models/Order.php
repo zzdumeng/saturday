@@ -7,5 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     //
-    protected $table = 'order';
+    // protected $table = 'order';
+
+    public function products() {
+        return $this->hasManyThrough('App\Models\Product', 'orderitem');
+    }
 }

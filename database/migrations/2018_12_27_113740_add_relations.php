@@ -54,9 +54,21 @@ class AddRelations extends Migration
             $table->foreign('billtype_id')->references('id')->on('billtypes');
         });
 
+        Schema::table('carts', function (Blueprint $table) {
+            // $table->index('user_id');
+
+            $table->foreign('user_id')->references('id')->on('users');
+        });
+
+        Schema::table('cartitems', function (Blueprint $table) {
+            $table->index('cart_id');
+
+            $table->foreign('cart_id')->references('id')->on('carts');
+        });
         Schema::table('orders', function (Blueprint $table) {
             $table->index('user_id');
             $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('payment_id')->references('id')->on('payments');
         });
 
         Schema::table('reviews', function (Blueprint $table) {
@@ -143,6 +155,7 @@ class AddRelations extends Migration
 
         Schema::table('orders', function (Blueprint $table) {
             $table->dropForeign(['user_id']);
+            $table->dropForeign(['payment_id']);
             $table->dropIndex(['user_id']);
         });
         Schema::table('reviews', function (Blueprint $table) {
@@ -174,6 +187,17 @@ class AddRelations extends Migration
             $table->dropForeign(['order_id']);
             $table->dropForeign(['product_id']);
             $table->dropIndex(['order_id']);
+
+        });
+
+        Schema::table('carts', function (Blueprint $table) {
+            $table->dropForeign(['user_id']);
+        });
+
+        Schema::table('cartitems', function (Blueprint $table) {
+            $table->dropForeign(['cart_id']);
+
+            $table->dropIndex(['cart_id']);
 
         });
         Schema::table('category_product', function (Blueprint $table) {

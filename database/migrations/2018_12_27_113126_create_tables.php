@@ -49,7 +49,7 @@ class CreateTables extends Migration
             $table->increments('id');
             $table->timestamps();
 
-            $table->string('name')->unique();
+            $table->string('name');
             $table->unsignedInteger('level');
         });
 
@@ -123,7 +123,7 @@ class CreateTables extends Migration
             $table->increments('id');
             $table->timestamps();
 
-            $table->string('name')->unique();
+            $table->string('name');
             $table->text('description');
         });
 
@@ -140,7 +140,7 @@ class CreateTables extends Migration
             $table->increments('id');
             $table->timestamps();
 
-            $table->string('name')->unique();
+            $table->string('name');
             $table->text('description');
         });
         Schema::create('orders', function (Blueprint $table) {
@@ -148,6 +148,7 @@ class CreateTables extends Migration
             $table->timestamps();
 
             $table->unsignedInteger('user_id');
+            $table->unsignedInteger('payment_id');
         });
         Schema::create('carts', function (Blueprint $table) {
             $table->increments('id');
@@ -158,6 +159,10 @@ class CreateTables extends Migration
         Schema::create('cartitems', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
+
+            $table->unsignedInteger('quantity');
+            $table->unsignedInteger('product_id');
+            $table->unsignedInteger('cart_id');
         });
         Schema::create('reviews', function (Blueprint $table) {
             $table->increments('id');
@@ -173,7 +178,7 @@ class CreateTables extends Migration
         Schema::create('tags', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
-            $table->string('name')->unique();
+            $table->string('name');
         });
         Schema::create('tag_product', function (Blueprint $table) {
             $table->increments('id');
@@ -193,15 +198,15 @@ class CreateTables extends Migration
         Schema::create('provinces', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
-            $table->string('name')->unique();
-            $table->unsignedInteger('code')->unique();
+            $table->string('name');
+            $table->unsignedInteger('code');
         });
         Schema::create('regions', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
 
-            $table->string('name')->unique();
-            $table->unsignedInteger('code')->unique();
+            $table->string('name');
+            $table->unsignedInteger('code');
 
             $table->unsignedInteger('province_id');
 
@@ -210,8 +215,8 @@ class CreateTables extends Migration
             $table->increments('id');
             $table->timestamps();
 
-            $table->string('name')->unique();
-            $table->unsignedInteger('code')->unique();
+            $table->string('name');
+            $table->unsignedInteger('code');
             $table->unsignedInteger('region_id');
 
         });

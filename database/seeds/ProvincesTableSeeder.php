@@ -14,13 +14,14 @@ class ProvincesTableSeeder extends Seeder
         //
 
         App\Models\Province::truncate();
-        for ($i = 0; $i < 20; $i++) {
-            # code...
-            try {
-                factory(App\Models\Province::class)->create();
-            } catch (Exception $e) {
-                echo 'something error when create province';
-            }}
+        factory(App\Models\Province::class, 10)->create();
+        // for ($i = 0; $i < 20; $i++) {
+        //     # code...
+        //     try {
+        //         factory(App\Models\Province::class)->create();
+        //     } catch (Exception $e) {
+        //         echo 'something error when create province;'.$e->getMessage();
+        //     }}
         // try{
         //     factory(App\Models\Province::class, 20)->create();
         // } catch (Exception $e) {

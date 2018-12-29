@@ -9,6 +9,9 @@ class Review extends Model
     //
     protected $casts = ['images' => 'array'];
 
+    public function setImagesAttribute($v) {
+        $this->attributes['images'] = json_encode($v);
+    }
     public function product() {
         return $this->belongsTo('App\Models\Product');
     }

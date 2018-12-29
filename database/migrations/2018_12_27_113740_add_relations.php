@@ -31,7 +31,8 @@ class AddRelations extends Migration
 
         Schema::table('categories', function (Blueprint $table) {
             $table->index('level');
-            // $table->foreign('user_id')->references('id')->on('users');
+            $table->index('category_id');
+            $table->foreign('category_id')->references('id')->on('categories');
         });
 
         Schema::table('messages', function (Blueprint $table) {
@@ -62,7 +63,9 @@ class AddRelations extends Migration
 
         Schema::table('cartitems', function (Blueprint $table) {
             $table->index('cart_id');
+            $table->index('product_id');
 
+            $table->foreign('product_id')->references('id')->on('products');
             $table->foreign('cart_id')->references('id')->on('carts');
         });
         Schema::table('orders', function (Blueprint $table) {
@@ -136,8 +139,10 @@ class AddRelations extends Migration
         });
 
         Schema::table('categories', function (Blueprint $table) {
-            $table->dropIndex('level');
+            $table->dropForeign([ 'category_id' ]);
+            $table->dropIndex([ 'level' ]);
             // $table->foreign('user_id')->references('id')->on('users');
+            $table->dropIndex([ 'category_id' ]);
         });
         Schema::table('footprints', function (Blueprint $table) {
             $table->dropForeign(['product_id']);
@@ -196,10 +201,13 @@ class AddRelations extends Migration
 
         Schema::table('cartitems', function (Blueprint $table) {
             $table->dropForeign(['cart_id']);
+            $table->dropForeign(['product_id']);
 
             $table->dropIndex(['cart_id']);
+            $table->dropIndex(['product_id']);
 
         });
+
         Schema::table('category_product', function (Blueprint $table) {
             $table->dropForeign(['product_id']);
             $table->dropForeign(['category_id']);

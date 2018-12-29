@@ -52,6 +52,11 @@ Route::get('/province', function (Request $req) {
     $p = Province::with('regions')->find($pid);
     return $p;
 });
-
 Route::get('/product/{id}', 'ProductController@show');
 Route::get('/category/{id}', 'ProductController@show');
+
+Route::post('user/register', 'APIRegisterController@register');
+Route::post('user/login', 'APILoginController@login');
+Route::middleware('jwt.auth')->get('users', function(Request $request) {
+    return auth()->user();
+});

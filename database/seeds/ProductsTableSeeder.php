@@ -14,6 +14,6 @@ class ProductsTableSeeder extends Seeder
         //
         App\Models\Product::truncate();
         (new Faker\Generator)->seed(123);
-        factory(App\Models\Product::class, 20)->create();
+        factory(App\Models\Product::class, 100)->create();
     }
 }

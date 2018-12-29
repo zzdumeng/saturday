@@ -4,8 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Region extends Model
+class CartItem extends Model
 {
     //
-    
+    protected $table = 'cartitems';
 }

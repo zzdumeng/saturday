@@ -12,4 +12,8 @@ class Order extends Model
     public function products() {
         return $this->hasManyThrough('App\Models\Product', 'orderitem');
     }
+
+    public function items() {
+        return $this->hasMany('App\Models\OrderItem' );
+    }
 }

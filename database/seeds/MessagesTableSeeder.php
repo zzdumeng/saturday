@@ -12,5 +12,8 @@ class MessagesTableSeeder extends Seeder
     public function run()
     {
         //
+        // App\Models\Message::truncate();
+        // (new Faker\Generator)->seed(123);
+        // factory(App\Models\Bill::class, 30)->create();
     }
 }

@@ -12,5 +12,8 @@ class OrderitemsTableSeeder extends Seeder
     public function run()
     {
         //
+        // App\Models\Bills::truncate();
+        // (new Faker\Generator)->seed(123);
+        // factory(App\Models\Bills::class, 30)->create();
     }
 }

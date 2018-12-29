@@ -42,7 +42,7 @@ class CreateTables extends Migration
             $table->tinyInteger('delivery')->default(0);
 
             $table->unsignedInteger('seller_id')->nullable();
-
+            $table->json('category_ids')->nullable();
         });
 
         Schema::create('categories', function (Blueprint $table) {
@@ -50,7 +50,8 @@ class CreateTables extends Migration
             $table->timestamps();
 
             $table->string('name');
-            $table->unsignedInteger('level');
+            $table->unsignedInteger('level')->default(0);
+            $table->unsignedInteger('category_id')->nullable();
         });
 
         Schema::create('sellers', function (Blueprint $table) {
@@ -78,12 +79,12 @@ class CreateTables extends Migration
             
             $table->string('detail', 100);
             $table->string('zipcode');
-            $table->string('receiver');
+            $table->string('contact');
             $table->string('mobile');
             $table->string('phone');
-            $table->unsignedInteger('province_id');
-            $table->unsignedInteger('region_id');
-            $table->unsignedInteger('city_id');
+            $table->unsignedInteger('province_id')->nullable();
+            $table->unsignedInteger('region_id')->nullable();
+            $table->unsignedInteger('city_id')->nullable();
 
             // morph, can be owned by a user or a seller
             $table->unsignedInteger('addressable_id');
@@ -131,7 +132,8 @@ class CreateTables extends Migration
             $table->increments('id');
             $table->timestamps();
 
-            $table->unsignedInteger('change');
+            $table->integer('change');
+            $table->integer('balance');
 
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('billtype_id');
@@ -146,7 +148,15 @@ class CreateTables extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
-
+            
+            // 0 : 待支付
+            // 1 : 待发货(已支付)
+            // 2 : 待收货
+            // 3 :: 待确认
+            // 4 :: 交易完成
+            // 10 :: 已关闭
+            // 11 :: 已取消 
+            $table->unsignedTinyInteger('status');
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('payment_id');
         });
@@ -182,7 +192,7 @@ class CreateTables extends Migration
         });
         Schema::create('tag_product', function (Blueprint $table) {
             $table->increments('id');
-            $table->timestamps();
+            // $table->timestamps();
 
 
             $table->unsignedInteger('product_id');
@@ -190,7 +200,7 @@ class CreateTables extends Migration
         });
         Schema::create('category_product', function (Blueprint $table) {
             $table->increments('id');
-            $table->timestamps();
+            // $table->timestamps();
 
             $table->unsignedInteger('product_id');
             $table->unsignedInteger('category_id');

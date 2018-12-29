@@ -9,6 +9,12 @@ class Product extends Model
     //
     protected $casts = ['images' => 'array'];
 
+    public function setImagesAttribute($v) {
+        $this->attributes['images'] = json_encode($v);
+    }
+    public function setSpecsAttribute($v) {
+        $this->attributes['specs'] = json_encode($v);
+    }
     public function tags() {
         return $this->belongsToMany('App\Models\Tag', 'tag_product');
     }

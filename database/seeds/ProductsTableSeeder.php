@@ -14,6 +14,11 @@ class ProductsTableSeeder extends Seeder
         //
         App\Models\Product::truncate();
         (new Faker\Generator)->seed(123);
-        factory(App\Models\Product::class, 100)->create();
+        $sellers = App\Models\Seller::all()->toArray();
+        factory(App\Models\Product::class, 10000)->create([
+            'seller_id' => function() use($sellers) {
+                return array_random($sellers)['id'];
+            }
+        ]);
     }
 }

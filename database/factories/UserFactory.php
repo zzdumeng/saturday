@@ -39,7 +39,8 @@ $factory->define(App\Models\Product::class, function (Faker $faker) {
     return [
         'name' => $faker->sentence(3),
         'digest' => $faker->sentence(5),
-        'images' => [$faker->imageUrl(200, 200)],
+        'images' => [$faker->imageUrl(200, 200), $faker->imageUrl(200, 200), $faker->imageUrl(200, 200),
+            $faker->imageUrl(200, 200)],
         'detail' => $faker->text(400),
         'original_price' => $faker->randomFloat(2, 40, 60),
         'current_price' => $faker->randomFloat(2, 20, 40),
@@ -48,10 +49,11 @@ $factory->define(App\Models\Product::class, function (Faker $faker) {
         'unit' => array_random(['克', '个', '只', '条']),
         'pack' => array_random(['箱', '袋', '包']),
         'is_friday' => array_random([true, false]),
+        'discount' => $faker->randomFloat(2, 0.6, 0.8),
         'is_exchange' => array_random([true, false]),
         'redeem_points' => mt_rand(500, 10000),
-        'status' => array_random([-1,0,1,2]),
-        'delivery' => array_random([0,1,2]),
+        'status' => array_random([-1, 0, 1, 2]),
+        'delivery' => array_random([0, 1, 2]),
 
         'seller_id' => 1,
     ];
@@ -64,7 +66,7 @@ $factory->define(App\Models\Address::class, function (Faker $faker) {
         'contact' => $faker->name(),
         'mobile' => $faker->phoneNumber(),
         'phone' => $faker->e164PhoneNumber(),
-        'province_id'=>1,
+        'province_id' => 1,
         'region_id' => 1,
         'city_id' => 1,
     ];
@@ -148,7 +150,7 @@ $factory->define(App\Models\Review::class, function (Faker $faker) {
     return [
         'rating' => mt_rand(1, 5),
         'content' => $faker->text(200),
-        'images' => array_map(function () {
+        'images' => array_map(function ()use($faker) {
             return $faker->imageUrl(200, 200);
         }, [1, 2, 3]),
         'product_id' => 1,

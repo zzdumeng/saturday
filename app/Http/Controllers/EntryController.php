@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\Hash;
 
 class EntryController extends Controller
 { //
+    public function me()
+    {
+        return response()->json(auth()->user());
+    }
     public function login(Request $req)
     {
         $name = $req->input('name');
@@ -47,5 +51,14 @@ class EntryController extends Controller
     public function retrievePassword()
     {
 
+    }
+    public function updateProfile(Request $req)
+    {
+        $user = auth()->user();
+        $updates = $req->input();
+        if(User::where('id','=', $user->id)->update($updates)) {
+            return ['success' => 1];
+        }
+        return ['error'=>1];
     }
 }

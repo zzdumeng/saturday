@@ -22,6 +22,10 @@ class CategoryProductTableSeeder extends Seeder
                 ->insert([
                     'product_id' => $p['id'],
                     'category_id' =>array_random($cs)['id'] ,               ]);
+            DB::table('category_product')
+                ->insert([
+                    'product_id' => $p['id'],
+                    'category_id' =>array_random($cs)['id'] ,               ]);
         }
         // factory(App\Models\CategoryProduct::class, 30)->create(
         //     ['category_id' => function () use ($cs) {

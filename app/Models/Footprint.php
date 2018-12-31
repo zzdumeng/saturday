@@ -7,4 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Footprint extends Model
 {
     //
+    public function product() {
+        return $this->belongsTo('App\Models\Product');
+    }
 }

@@ -40,9 +40,12 @@ class test extends Command
     public function handle()
     {
         $a = [3,4,5,6,7,8];
+
+        $carts = \App\Models\Cart::all()->toArray();
+        $ps = \App\Models\Product::all()->toArray();
         for ($i=0; $i < 10; $i++) { 
             # code...
-            echo array_random($a);
+            echo array_random($carts)['id']."\n";
         }
     }
         //

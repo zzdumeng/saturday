@@ -16,7 +16,7 @@ class FootprintsTableSeeder extends Seeder
         (new Faker\Generator)->seed(123);
         $ps = App\Models\Product::all()->toArray();
         $users = App\Models\User::all()->toArray();
-        factory(App\Models\Footprint::class, 30)->create(
+        factory(App\Models\Footprint::class, 300)->create(
             ['product_id' => function () use ($ps) {
                 return array_random($ps)['id'];
             },

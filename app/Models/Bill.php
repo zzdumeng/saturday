@@ -8,4 +8,7 @@ class Bill extends Model
 {
     //
     // protected $table = 'bill';
+    public function billtype() {
+        return $this->belongsTo('App\Models\BillType', 'billtype_id');
+    }
 }

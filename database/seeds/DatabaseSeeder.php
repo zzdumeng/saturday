@@ -17,9 +17,9 @@ class DatabaseSeeder extends Seeder
         $this->call(CitiesTableSeeder::class);
 
         $this->call(UsersTableSeeder::class);
-        $this->call(ProductsTableSeeder::class);
         $this->call(AddressesTableSeeder::class);
         $this->call(SellersTableSeeder::class);
+        $this->call(ProductsTableSeeder::class);
         $this->call(CategoriesTableSeeder::class);
 
 
@@ -27,7 +27,7 @@ class DatabaseSeeder extends Seeder
         $this->call(BilltypesTableSeeder::class);
         $this->call(BillsTableSeeder::class);
 
-        $this->call(CartsTableSeeder::class);
+        // $this->call(CartsTableSeeder::class);
         $this->call(CartItemsTableSeeder::class);
 
         $this->call(CategoryProductTableSeeder::class);
@@ -40,6 +40,10 @@ class DatabaseSeeder extends Seeder
         $this->call(ReviewsTableSeeder::class);
         $this->call(TagsTableSeeder::class);
         // $this->call(TagProductTableSeeder::class);
+
+        $this->call(AlterProductsTable::class);
+        $this->call(AlterUserTable::class);
+        $this->call(AlterOrderTable::class);
 
     }
 }

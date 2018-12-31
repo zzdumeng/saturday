@@ -18,14 +18,17 @@ class FavoritesTableSeeder extends Seeder
         $users = App\Models\User::all()->toArray();
         $products = App\Models\Product::all()->toArray();
         for ($i = 0; $i < 1000; $i++) {
-
+            // DB::table('favorites')->insert([
+            //     'user_id' => function () use ($users) {
+            //         return array_random($users)['id'];
+            //     },
+            //     'product_id' => function () use ($products) {
+            //         return array_random($products)['id'];
+            //     },
+            // ]);
             DB::table('favorites')->insert([
-                'user_id' => function () use ($users) {
-                    return array_random($users)['id'];
-                },
-                'product_id' => function () use ($products) {
-                    return array_random($products)['id'];
-                },
+                'user_id' => array_random($users)['id'],
+                'product_id' => array_random($users)['id'],
             ]);
         }
     }

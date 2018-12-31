@@ -25,14 +25,15 @@ Route::get('/flight', function (Request $req, Response $res) {
     return $flights;
 });
 
-Route::get('/product', function (Request $req) {
+Route::get('/products', function (Request $req) {
     // $pro = App\Product::findOrFail(1);
     // $pro = App\Product::all();
     $pro = App\Product::where('title', '苹果')->first();
     return $pro;
 });
 
-Route::post('/product/add', function (Request $req) {
+
+Route::post('/product/create', function (Request $req) {
     $name = $req->input('name');
     $price = $req->input('price');
 
@@ -52,11 +53,36 @@ Route::get('/province', function (Request $req) {
     $p = Province::with('regions')->find($pid);
     return $p;
 });
-Route::get('/product/{id}', 'ProductController@show');
-Route::get('/category/{id}', 'ProductController@show');
+Route::get('/products/{id}', 'ProductController@show');
+Route::get('/products/{id}/reviews', 'ProductController@getReviews');
+Route::get('/search', 'ProductController@search');
 
-Route::post('user/register', 'APIRegisterController@register');
+Route::get('/home', 'HomeController');
+// Route::get('/reviews/{id}', 'ReviewController@show');
+// Route::get('/reviews/{id}', 'ReviewController@show');
+
+
+// Route::get('/sellers/{id}', '')
+
+Route::post('user/signup', 'APIRegisterController@register');
 Route::post('user/login', 'APILoginController@login');
+// Route::post('user/me', 'EntryController@me');
 Route::middleware('jwt.auth')->get('users', function(Request $request) {
     return auth()->user();
 });
+Route::middleware('jwt.auth')->get('user/me', 'EntryController@me');
+Route::middleware('jwt.auth')->post('user/me/update', 'EntryController@updateProfile');
+// Route::middleware('jwt.auth')->post('user/me/pay', 'EntryController@updateProfile');
+//  add auth middleware
+Route::middleware(['jwt.auth', 'check.self'])->get('users/{id}/orders', 'UserController@getOrders');
+Route::middleware(['jwt.auth', 'check.self'])->get('users/{id}/messages', 'UserController@getMessages');
+Route::middleware(['jwt.auth', 'check.self'])->get('users/{id}/addresses', 'UserController@getAddresses');
+Route::middleware(['jwt.auth', 'check.self'])->get('users/{id}/footprints', 'UserController@getFootprints');
+Route::middleware(['jwt.auth', 'check.self'])->get('users/{id}/bills', 'UserController@getBills');
+
+// 订单详情
+Route::get('orders/{id}', 'OrderController@show');
+
+// test
+Route::get('categories/{id}', 'CategoryController@show');
+// Route::get('test', 'ProductController@test');

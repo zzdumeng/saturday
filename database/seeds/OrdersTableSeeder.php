@@ -24,7 +24,7 @@ class OrdersTableSeeder extends Seeder
             'payment_id' => function () use ($pays) {
                 return array_random($pays)['id'];
             },
-        ])->each(function ($order) {
+        ])->each(function ($order) use($ps){
             $order->items()->saveMany(factory(App\Models\OrderItem::class, 3)->create(
                 ['product_id' => function () use ($ps) {
                     return array_random($ps)['id'];

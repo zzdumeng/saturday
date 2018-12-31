@@ -160,19 +160,19 @@ class CreateTables extends Migration
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('payment_id');
         });
-        Schema::create('carts', function (Blueprint $table) {
-            $table->increments('id');
-            $table->timestamps();
+        // Schema::create('carts', function (Blueprint $table) {
+        //     $table->increments('id');
+        //     $table->timestamps();
 
-            $table->unsignedInteger('user_id');
-        });
+        //     $table->unsignedInteger('user_id');
+        // });
         Schema::create('cartitems', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
 
             $table->unsignedInteger('quantity');
             $table->unsignedInteger('product_id');
-            $table->unsignedInteger('cart_id');
+            $table->unsignedInteger('user_id');
         });
         Schema::create('reviews', function (Blueprint $table) {
             $table->increments('id');

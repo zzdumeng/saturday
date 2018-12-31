@@ -14,16 +14,26 @@ class CartItemsTableSeeder extends Seeder
         //
         App\Models\CartItem::truncate();
         (new Faker\Generator)->seed(123);
-        $carts = App\Models\Cart::all()->toArray();
+        $users = App\Models\User::all()->toArray();
         $ps = App\Models\Product::all()->toArray();
-        factory(App\Models\CartItem::class, 30)->create([
-            ['cart_id' => function () use ($carts) {
-                return array_random($carts)['id'];
-            },
-                'product_id' => function () use ($ps) {
-                    return array_random($ps)['id'];
-                },
-            ],
-        ]);
+        for ($i=0; $i < 80; $i++) { 
+            DB::table('cartitems')
+            ->insert(['user_id' => array_random($users)['id'],
+            'quantity' => mt_rand(1,6),
+            'product_id' => array_random($ps)['id']]);
+        }
+        // $items = factory(App\Models\CartItem::class, 80)->make([
+        //     // [
+        //     //     'user_id' => function () use ($users) {
+        //     //         return array_random($users)['id'];
+        //     //     },
+        //     //     'product_id' => function () use ($ps) {
+        //     //         return array_random($ps)['id'];
+        //     //     },
+        //     // ],
+        //     ['user_id' => 2,
+        //         'product_id' => 2],
+        // ]);
+        // App\Models\CartItem::insert($items->toArray());
     }
 }

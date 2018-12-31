@@ -7,7 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class OrderItem extends Model
 {
     //
-    // protected $table = 'orderitem';
-
+    protected $table = 'orderitems';
+    public function product() {
+        return $this->belongsTo('App\Models\Product');
+    }
     
 }

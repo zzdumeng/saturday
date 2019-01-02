@@ -17,6 +17,11 @@ class CheckSelf
     public function handle($request, Closure $next)
     {
         // $user = User::find($request->input('id'));
+        // FIXME: temp for dev
+        if (env('STAGE') == 'test') {
+            return $next($request);
+        }
+
         $user = User::find($request->route('id'));
         if (!$user) {
             return response(['error' => 'should have id input']);

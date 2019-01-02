@@ -30,7 +30,9 @@ class User extends Authenticatable
     public function addresses() {
         return $this->morphMany('App\Models\Address', 'addressable');
     }
-
+    public function points() {
+        return $this->hasMany('App\Models\Point');
+    }
     public function orders() {
         return $this->hasMany('App\Models\Order')->with('items')->paginate(10);
     }
@@ -43,5 +45,16 @@ class User extends Authenticatable
     public function bills() {
         return $this->hasMany('App\Models\Bill')->with('billtype')->paginate(10);
     }
+
+    /**
+     * user's money can be get from bills
+     */
+    public function getCurrentMoneyAttribute() {
+        return $this->bills()->sort('created_at', 'DESC')->first()->balance || 0;
+    }
+    public function getCurrentPointsAttribute() {
+        return $this->points()->sort('created_at', 'DESC')->first()->current || 0;
+    }
+
 }
 

@@ -27,6 +27,9 @@ class APILoginController extends Controller
         } catch (JWTException $e) {
             return response()->json(['error' => 'could_not_create_token'], 500);
         }
-        return response()->json(compact('token'));
+        // return response()->json(compact('token'));
+        $user = auth()->user();
+        $user['token']=$token;
+        return response()->json($user);
     }
 }

@@ -72,6 +72,7 @@ class AddRelations extends Migration
             $table->index('user_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('payment_id')->references('id')->on('payments');
+            $table->foreign('address_id')->references('id')->on('addresses');
         });
 
         Schema::table('reviews', function (Blueprint $table) {
@@ -161,7 +162,10 @@ class AddRelations extends Migration
         Schema::table('orders', function (Blueprint $table) {
             $table->dropForeign(['user_id']);
             $table->dropForeign(['payment_id']);
+            $table->dropForeign(['address_id']);
+
             $table->dropIndex(['user_id']);
+
         });
         Schema::table('reviews', function (Blueprint $table) {
             $table->dropForeign(['product_id']);

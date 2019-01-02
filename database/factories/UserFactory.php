@@ -61,9 +61,10 @@ $factory->define(App\Models\Product::class, function (Faker $faker) {
 
 $factory->define(App\Models\Address::class, function (Faker $faker) {
     return [
-        'detail' => $faker->text(20),
+        'detail' => $faker->text(30),
         'zipcode' => $faker->postcode(),
         'contact' => $faker->name(),
+        'note' => $faker->text(10),
         'mobile' => $faker->phoneNumber(),
         'phone' => $faker->e164PhoneNumber(),
         'province_id' => 1,
@@ -107,13 +108,16 @@ $factory->define(App\Models\Footprint::class, function (Faker $faker) {
 });
 $factory->define(App\Models\Message::class, function (Faker $faker) {
     return [
-        'content' => $faker->text(200),
+        'content' => $faker->text(300),
+        'status' => 0,
+        'title' => $faker->text(15),
         'user_id' => 1,
     ];
 });
 $factory->define(App\Models\Order::class, function (Faker $faker) {
     return [
         'status' => array_random([0, 1, 2, 3, 4, 10, 11]),
+        'type' =>array_random([0,1,1]),
         'user_id' => 1,
         'payment_id' => 1,
     ];
@@ -122,6 +126,7 @@ $factory->define(App\Models\OrderItem::class, function (Faker $faker) {
     return [
         'quantity' => random_int(1, 10),
         'price' => $faker->randomFloat(2, 20, 100),
+        'spec' => mt_rand(20, 200),
         'product_id' => 1,
         'order_id' => 1,
     ];

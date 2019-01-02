@@ -148,7 +148,10 @@ class CreateTables extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
-            
+           
+            # 0 : 普通订单
+            # 1 : 积分订单
+            $table->unsignedTinyInteger('type');
             // 0 : 待支付
             // 1 : 待发货(已支付)
             // 2 : 待收货
@@ -158,6 +161,7 @@ class CreateTables extends Migration
             // 11 :: 已取消 
             $table->unsignedTinyInteger('status');
             $table->unsignedInteger('user_id');
+            $table->unsignedInteger('address_id');
             $table->unsignedInteger('payment_id');
         });
         // Schema::create('carts', function (Blueprint $table) {
@@ -171,6 +175,7 @@ class CreateTables extends Migration
             $table->timestamps();
 
             $table->unsignedInteger('quantity');
+            $table->unsignedInteger('spec');
             $table->unsignedInteger('product_id');
             $table->unsignedInteger('user_id');
         });

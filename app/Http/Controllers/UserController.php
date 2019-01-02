@@ -20,6 +20,11 @@ class UserController extends Controller
             return $user->orders();
         // }
     }
+    public function getPoints(Request $req, $id) {
+        // 
+        $user = User::find($id);
+        return $user->points();
+    }
     public function getMessages(Request $req, $id) {
         // 
         $user = User::find($id);

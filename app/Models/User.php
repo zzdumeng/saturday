@@ -37,8 +37,13 @@ class User extends Authenticatable
         return $this->hasMany('App\Models\Order')->with('items')->paginate(10);
     }
     public function messages() {
-        return $this->hasMany('App\Models\Message')->paginate(10);
+        return $this->hasMany('App\Models\Message');
     }
+    public function pagedMessages() {
+        return $this->hasMany('App\Models\Message')->paginate(10);
+
+    }
+
     public function footprints() {
         return $this->hasMany('App\Models\Footprint')->with('product')->paginate(10);
     }

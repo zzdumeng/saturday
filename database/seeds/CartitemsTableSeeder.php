@@ -20,6 +20,7 @@ class CartItemsTableSeeder extends Seeder
             DB::table('cartitems')
             ->insert(['user_id' => array_random($users)['id'],
             'quantity' => mt_rand(1,6),
+            'spec' => mt_rand(20,200),
             'product_id' => array_random($ps)['id']]);
         }
         // $items = factory(App\Models\CartItem::class, 80)->make([

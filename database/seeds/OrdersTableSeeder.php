@@ -17,9 +17,15 @@ class OrdersTableSeeder extends Seeder
         $users = App\Models\User::all()->toArray();
         $ps = App\Models\Product::all()->toArray();
         $pays = App\Models\Payment::all()->toArray();
-        factory(App\Models\Order::class, 30)->create([
+        $addrs = App\Models\Address::all()->toArray();
+        $sellers = App\Models\Seller::all()->toArray();
+        factory(App\Models\Order::class, 300)->create([
             'user_id' => function () use ($users) {
                 return array_random($users)['id'];
+            },
+            'address_id' => array_random($addrs)['id'],
+            'seller_id' => function() use($sellers) {
+                return array_random($sellers)['id'];
             },
             'payment_id' => function () use ($pays) {
                 return array_random($pays)['id'];

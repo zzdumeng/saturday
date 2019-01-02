@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Address;
 use App\Models\Footprint;
+use App\Models\Order;
+use App\Models\CartItem;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -23,7 +25,10 @@ class MeController extends Controller
         $updates = ['name' => $in->name,
             'birthday' => $in->birthday,
             'sex' => $in->sex];
-        if($avatar) $updates['avatar'] = $path;
+        if ($avatar) {
+            $updates['avatar'] = $path;
+        }
+
         return User::where('id', $user->id)->update($updates);
 
     }
@@ -117,5 +122,66 @@ class MeController extends Controller
     {
         $id = $req->input('footprint_id');
         return Footprint::where('id', $id)->delete();
+    }
+
+    // order
+    public function addOrder(Request $req)
+    {
+        $user = auth()->user();
+        $items = $req->input('items');
+        $pids = [];
+        foreach ($items as $item ) {
+            array_push($pids, $item['produce_id']);
+        }
+        
+        $order = Order::create(['user_id' => $user->id,
+            status => 0]);
+        $order->items()->saveMany(
+            $items
+        );
+        // and remove the items in cartitems
+        CartItem::where('user_id', '=', $user->id)
+        ->whereIn('product_id', $pids)
+        ->delete();
+        return $order;
+    }
+
+    public function payOrder(Request $req)
+    {
+        $order = Order::where('id', $req->input('order_id'))
+        ->update(['status' => 1]);
+        return $order;
+    }
+    public function cancelOrder(Request $req)
+    {
+        # code...
+        $r= Order::where('id', $req->input('order_id'))
+        ->update(['status' => 11]);
+        return $r;
+    }
+    public function deleteOrder(Request $req)
+    {
+        # code...
+
+    }
+    /**
+     * confirm the orde has delivered
+     */
+    public function confirmOrder(Request $req)
+    {
+        # code...
+        $r= Order::where('id', $req->input('order_id'))
+        ->update(['status' => 4]);
+        return $r;
+    }
+    // cart
+    public function addCartItem(Request $req)
+    {
+        # [product_id,]
+        // create a new cart item
+        $user =  auth()->user();
+        $item = CartItem::create(['user_id' => $user->id,
+        'product_id' => $req->input('product_id')]);
+        return $item;
     }
 }

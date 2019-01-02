@@ -17,6 +17,9 @@ $factory->define(App\Models\User::class, function (Faker $faker) {
     return [
         'name' => $faker->name,
         'email' => $faker->unique()->safeEmail,
+        'sex' => array_random([0, 1, 2]),
+        'birthday' => $faker->dateTimeBetween('-30 years', '-8 years'),
+        'avatar' => $faker->imageUrl(128, 128, 'cats'),
         'mobile' => $faker->phoneNumber(),
         'email_verified_at' => now(),
         'password' => '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', // secret
@@ -32,6 +35,7 @@ $factory->define(App\Models\CartItem::class, function (Faker $faker) {
     return [
         'quantity' => mt_rand(2, 10),
         'product_id' => 1,
+        'spec' => mt_rand(20, 2000),
         'cart_id' => 1,
     ];
 });
@@ -42,10 +46,19 @@ $factory->define(App\Models\Product::class, function (Faker $faker) {
         'images' => [$faker->imageUrl(200, 200), $faker->imageUrl(200, 200), $faker->imageUrl(200, 200),
             $faker->imageUrl(200, 200)],
         'detail' => $faker->text(400),
-        'original_price' => $faker->randomFloat(2, 40, 60),
-        'current_price' => $faker->randomFloat(2, 20, 40),
-        'specs' => [mt_rand(10, 100), mt_rand(100, 200),
-            mt_rand(200, 500)],
+        // 'original_price' => $faker->randomFloat(2, 40, 60),
+        // 'current_price' => $faker->randomFloat(2, 20, 40),
+        'specs' => [
+            ['original_price' => $faker->randomFloat(2, 40, 60),
+                'current_price' => $faker->randomFloat(2, 40, 60),
+                'quantity' => mt_rand(200, 500)],
+            ['original_price' => $faker->randomFloat(2, 40, 60),
+                'current_price' => $faker->randomFloat(2, 40, 60),
+                'quantity' => mt_rand(200, 500)],
+            ['original_price' => $faker->randomFloat(2, 40, 60),
+                'current_price' => $faker->randomFloat(2, 40, 60),
+                'quantity' => mt_rand(200, 500)],
+        ],
         'unit' => array_random(['克', '个', '只', '条']),
         'pack' => array_random(['箱', '袋', '包']),
         'is_friday' => array_random([true, false]),
@@ -117,9 +130,10 @@ $factory->define(App\Models\Message::class, function (Faker $faker) {
 $factory->define(App\Models\Order::class, function (Faker $faker) {
     return [
         'status' => array_random([0, 1, 2, 3, 4, 10, 11]),
-        'type' =>array_random([0,1,1]),
+        'type' => array_random([0, 1, 1]),
         'user_id' => 1,
         'payment_id' => 1,
+        'seller_id' => 1,
     ];
 });
 $factory->define(App\Models\OrderItem::class, function (Faker $faker) {
@@ -155,7 +169,7 @@ $factory->define(App\Models\Review::class, function (Faker $faker) {
     return [
         'rating' => mt_rand(1, 5),
         'content' => $faker->text(200),
-        'images' => array_map(function ()use($faker) {
+        'images' => array_map(function () use ($faker) {
             return $faker->imageUrl(200, 200);
         }, [1, 2, 3]),
         'product_id' => 1,

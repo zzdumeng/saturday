@@ -21,8 +21,8 @@ class CreateTables extends Migration
             // $table->double('price');
             $table->json('images')->nullable();
             $table->text('detail')->nullable();
-            $table->double('original_price')->nullable();
-            $table->double('current_price')->nullable();
+            // $table->double('original_price')->nullable();
+            // $table->double('current_price')->nullable();
             $table->json('specs')->nullable();
             $table->string('unit')->nullable();
             $table->string('pack')->nullable();

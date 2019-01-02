@@ -14,7 +14,7 @@ class UsersTableSeeder extends Seeder
         //
         App\Models\User::truncate();
         (new Faker\Generator)->seed(123);
-        factory(App\Models\User::class, 20)->create()->each(function($user){
+        factory(App\Models\User::class, 10)->create()->each(function($user){
             $user->messages()->saveMany(factory(App\Models\Message::class, 5)->make());
         });
     }

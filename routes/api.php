@@ -94,9 +94,19 @@ Route::middleware(['jwt.auth', 'check.self'])->post('me/address/default', 'MeCon
 # footprint
 Route::middleware(['jwt.auth', 'check.self'])->post('me/footprint/create', 'MeController@addFootprint');
 Route::middleware(['jwt.auth', 'check.self'])->post('me/footprint/delete', 'MeController@deleteFootprint');
+# order
+Route::middleware(['jwt.auth', 'check.self'])->post('me/order/create', 'MeController@addOrder');
+Route::middleware(['jwt.auth', 'check.self'])->post('me/order/pay', 'MeController@payOrder');
+Route::middleware(['jwt.auth', 'check.self'])->post('me/order/cancel', 'MeController@cancelOrder');
+Route::middleware(['jwt.auth', 'check.self'])->post('me/order/confirm', 'MeController@confirmOrder');
+Route::middleware(['jwt.auth', 'check.self'])->post('me/order/delete', 'MeController@deleteOrder');
+
+# cart
+Route::middleware(['jwt.auth', 'check.self'])->post('me/cart/add', 'MeController@addCartItem');
 // 订单详情
 Route::get('orders/{id}', 'OrderController@show');
 
 // test
 Route::get('categories/{id}', 'CategoryController@show');
-// Route::get('test', 'ProductController@test');
+Route::post('test', 'ProductController@test');
+

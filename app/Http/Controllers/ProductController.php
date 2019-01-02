@@ -92,7 +92,19 @@ class ProductController extends Controller
         // Product::f
 
     }
-    public function test(){
-        Product::where(['name', 'like', '%a%']);
+    public function test(Request $req){
+        // Product::where(['name', 'like', '%a%']);
+        $items = $req->input('items');
+        $i1 = $items[0];
+        $i1['price'] = 30;
+        $items[0]['sdf'] = 20;
+        for ($i=0; $i < count($items); $i++) { 
+            $items[$i]['price'] = 30;
+        }
+        // foreach ($items as $item) {
+        //     $item['x'] = 3;
+        // }
+        return $items;
+        // return $i1;
     }
 }

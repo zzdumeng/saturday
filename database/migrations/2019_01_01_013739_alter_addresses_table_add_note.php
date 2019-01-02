@@ -18,7 +18,7 @@ class AlterAddressesTableAddNote extends Migration
             $table->string('note')->nullable();
         });
         Schema::table('users', function (Blueprint $table) {
-            $table->unsignedInteger('default_address');
+            $table->unsignedInteger('default_address')->nullable();
             $table->foreign('default_address')->references('id')->on('addresses');
         });
     }

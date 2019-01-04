@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Footprint extends Model
 {
+    use \Backpack\CRUD\CrudTrait;
     //
     public function product() {
         return $this->belongsTo('App\Models\Product');

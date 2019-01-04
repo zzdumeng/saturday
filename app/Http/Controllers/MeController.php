@@ -286,9 +286,13 @@ class MeController extends Controller
             'spec' => $req->input('item.spec')]);
         return ['id' => $item->id];
     }
+    /**
+     * NOTE: this is a method to remove an array of itemsj
+     */
     public function deleteCartItem(Request $req)
     {
-        return CartItem::where('id', $req->input('id'))
+        $ids = $req->input('items');
+        return CartItem::whereIn('id',$ids)
             ->delete();
 
     }

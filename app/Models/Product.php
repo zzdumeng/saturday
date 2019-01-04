@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Product extends Model
 {
+    use \Backpack\CRUD\CrudTrait;
     //
     protected $casts = ['images' => 'array',
         'specs' => 'array'];

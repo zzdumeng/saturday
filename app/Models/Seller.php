@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class Seller extends Model
 {
     //
-
+    use \Backpack\CRUD\CrudTrait;
+    
     public function products() {
         return $this->hasMany('product');
     }

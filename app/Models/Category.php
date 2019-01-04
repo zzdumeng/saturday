@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Category extends Model
 {
+    use \Backpack\CRUD\CrudTrait;
     //
     public function products () {
         return $this->belongsToMany('App\Models\Product', 'category_product');

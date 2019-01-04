@@ -29,7 +29,10 @@ class APILoginController extends Controller
         }
         // return response()->json(compact('token'));
         $user = auth()->user();
+        $u = User::find($user->id);
         $user['token']=$token;
+        $user['money'] = $u->current_money;
+        $user['points'] = $u->current_points;
         return response()->json($user);
     }
 }

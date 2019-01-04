@@ -3,33 +3,130 @@
 namespace App\Http\Controllers;
 
 use App\Models\Address;
-use App\Models\Footprint;
-use App\Models\Order;
 use App\Models\CartItem;
+use App\Models\Footprint;
+use App\Models\Message;
 use App\Models\User;
 use Illuminate\Http\Request;
 
 class MeController extends Controller
 {
+
+    // retrieve my information
+    public function getOrders(Request $req)
+    {
+        $user = auth()->user();
+        $filter = $req->input('filter') ?? 'all';
+        $map = ['all' => [0],
+            'to-pay' => [0],
+            'to-ship' => [1],
+            'to-confirm' => [2],
+            'to-review' => [4],
+            'finished' => [5, 10, 11]];
+        $status = $map[$filter];
+        // $page = $req->input('page') || 1;
+        $query = User::find($user->id)
+            ->orders()->with(['items', 'seller']);
+        if ($filter != 'all' && $status) {
+            $query = $query->whereIn('status', $status);
+        }
+        return $query->paginate(10);
+    }
+    public function test(Request $req)
+    {
+        return $req->input('c');
+        // $query = User::find(1)
+        //     ->orders()->with(['items', 'seller'])->where('status', '=', $req->input('status'));
+    }
+    public function getMessages(Request $req)
+    {
+        $user = auth()->user();
+        // $page = $req->input('page') || 1;
+        return User::find($user->id)
+            ->paged_messages;
+        // return Message::where('user_id', $user->id)
+        // ->sort('created_at', 'DESC')
+        // ->skip(($page-1)*10)
+        // ->limit(10)
+        // ->get();
+        // return
+    }
+    public function getMessage($id)
+    {
+        return Message::find($id);
+    }
+
+    public function deleteMessage(Request $req)
+    {
+        $id = $req->input('id');
+        return Message::where('id', $id)
+            ->delete();
+    }
+    public function updateMessageStatus(Request $req)
+    {
+        $id = $req->input('id');
+        $status = $req->input('status');
+        return Message::where('id', $id)
+            ->update(['status' => $status]);
+    }
+    public function getPoints(Request $req)
+    {
+
+        $user = auth()->user();
+        return User::find($user->id)
+            ->paged_points;
+    }
+    public function getAddresses(Request $req)
+    {
+        $user = auth()->user();
+        return User::find($user->id)
+            ->addresses();
+    }
+    public function getFootprints(Request $req)
+    {
+        $user = auth()->user();
+        return User::find($user->id)
+            ->paged_footprints;
+    }
+    public function getBills(Request $req)
+    {
+        $user = auth()->user();
+        return User::find($user->id)
+            ->paged_bills;
+    }
     // profile
     public function updateProfile(Request $req)
     {
+        // $validated = Validator::make($req->all(),[
+        //     'name' => '',
+        //     'birthday' => 'date|nullable',
+        //     'sex' => 'in:0,1,2'
+        // ]);
+        // if($validated->fails()) {
+        //     return ['error' => 1, 'message' => $validated->errors()];
+        // }
         $avatar = $req->file('avatar');
         $user = auth()->user();
-        $in = $req->input();
+        $in = $req->all();
+        // return $in;
         # save the file to avatar diretory
         if ($avatar) {
-            $path = $avatar->store('avatars');
+            $path = $avatar->store('public/avatars');
+            $path = '/storage/' . preg_replace('/^public\//', '', $path);
         }
         # update database
-        $updates = ['name' => $in->name,
-            'birthday' => $in->birthday,
-            'sex' => $in->sex];
+        $updates = ['name' => $in['name'],
+            'sex' => $in['sex']];
+        if (isset($in['birthday'])) {
+            $updates['birthday'] = $in['birthday'];
+        }
+
         if ($avatar) {
             $updates['avatar'] = $path;
         }
 
-        return User::where('id', $user->id)->update($updates);
+        User::where('id', $user->id)->update($updates);
+        return User::find($user->id);
 
     }
     public function changeMobile(Request $req)
@@ -130,10 +227,10 @@ class MeController extends Controller
         $user = auth()->user();
         $items = $req->input('items');
         $pids = [];
-        foreach ($items as $item ) {
-            array_push($pids, $item['produce_id']);
+        foreach ($items as $item) {
+            array_push($pids, $item['product_id']);
         }
-        
+
         $order = Order::create(['user_id' => $user->id,
             status => 0]);
         $order->items()->saveMany(
@@ -141,28 +238,26 @@ class MeController extends Controller
         );
         // and remove the items in cartitems
         CartItem::where('user_id', '=', $user->id)
-        ->whereIn('product_id', $pids)
-        ->delete();
+            ->whereIn('product_id', $pids)
+            ->delete();
         return $order;
     }
 
     public function payOrder(Request $req)
     {
         $order = Order::where('id', $req->input('order_id'))
-        ->update(['status' => 1]);
+            ->update(['status' => 1]);
         return $order;
     }
     public function cancelOrder(Request $req)
     {
-        # code...
-        $r= Order::where('id', $req->input('order_id'))
-        ->update(['status' => 11]);
+        $r = Order::where('id', $req->input('order_id'))
+            ->update(['status' => 11]);
         return $r;
     }
     public function deleteOrder(Request $req)
     {
-        # code...
-
+        return Order::where('id', $req->input('order_id'))->delete();
     }
     /**
      * confirm the orde has delivered
@@ -170,18 +265,36 @@ class MeController extends Controller
     public function confirmOrder(Request $req)
     {
         # code...
-        $r= Order::where('id', $req->input('order_id'))
-        ->update(['status' => 4]);
+        $r = Order::where('id', $req->input('order_id'))
+            ->update(['status' => 4]);
         return $r;
     }
     // cart
+    public function getCartItems(Request $req)
+    {
+        $user = User::find(auth()->user()->id)->with('cartitems');
+        return $user->cartitems;
+    }
     public function addCartItem(Request $req)
     {
         # [product_id,]
         // create a new cart item
-        $user =  auth()->user();
+        $user = auth()->user();
         $item = CartItem::create(['user_id' => $user->id,
-        'product_id' => $req->input('product_id')]);
+            'product_id' => $req->input('product_id')]);
         return $item;
     }
+    public function deleteCartItem(Request $req)
+    {
+        return CartItem::where('id', $req->input('id'))
+            ->delete();
+
+    }
+    public function alterCartItem(Request $req)
+    {
+        $quantity = $req->input('quantity');
+        $id = $req->input('id');
+        return CartItem::where('id', $id)->update(['quantity' => $quantity ]);
+    }
+
 }

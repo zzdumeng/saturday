@@ -21,7 +21,7 @@ class PointsTableSeeder extends Seeder
                     'change'=> mt_rand(10, 1000),
                     'current' => mt_rand(1000, 2000),
                     'source' => $faker->text(15),
-                    'user_id' => $user->id,
+                    'user_id' => $user['id'],
                 ]);
             }
         }

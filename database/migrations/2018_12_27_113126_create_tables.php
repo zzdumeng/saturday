@@ -156,9 +156,14 @@ class CreateTables extends Migration
             // 1 : 待发货(已支付)
             // 2 : 待收货
             // 3 :: 待确认
-            // 4 :: 交易完成
+            // 4 :: 待评价
+            // 5 :: 已评价
+            // 
             // 10 :: 已关闭
             // 11 :: 已取消 
+            // 12 :: 申请退款
+            // 13 :: 正在退款
+            // 14 :: 退款成功
             $table->unsignedTinyInteger('status');
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('address_id');

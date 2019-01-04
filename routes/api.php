@@ -72,13 +72,21 @@ Route::middleware('jwt.auth')->get('user/me', 'EntryController@me');
 Route::middleware('jwt.auth')->post('user/me/update', 'EntryController@updateProfile');
 // Route::middleware('jwt.auth')->post('user/me/pay', 'EntryController@updateProfile');
 //  add auth middleware
-Route::middleware(['jwt.auth', 'check.self'])->get('users/{id}/orders', 'UserController@getOrders');
-Route::middleware(['jwt.auth', 'check.self'])->get('users/{id}/messages', 'UserController@getMessages');
-Route::middleware(['jwt.auth', 'check.self'])->get('users/{id}/points', 'UserController@getPoints');
-Route::middleware(['jwt.auth', 'check.self'])->get('users/{id}/addresses', 'UserController@getAddresses');
-Route::middleware(['jwt.auth', 'check.self'])->get('users/{id}/footprints', 'UserController@getFootprints');
-Route::middleware(['jwt.auth', 'check.self'])->get('users/{id}/bills', 'UserController@getBills');
+// Route::middleware(['jwt.auth', 'check.self'])->get('users/{id}/orders', 'UserController@getOrders');
+// Route::middleware(['jwt.auth', 'check.self'])->get('users/{id}/messages', 'UserController@getMessages');
+// Route::middleware(['jwt.auth', 'check.self'])->get('users/{id}/points', 'UserController@getPoints');
+// Route::middleware(['jwt.auth', 'check.self'])->get('users/{id}/addresses', 'UserController@getAddresses');
+// Route::middleware(['jwt.auth', 'check.self'])->get('users/{id}/footprints', 'UserController@getFootprints');
+// Route::middleware(['jwt.auth', 'check.self'])->get('users/{id}/bills', 'UserController@getBills');
 
+Route::middleware(['jwt.auth', 'check.self'])->get('me/orders', 'MeController@getOrders');
+Route::middleware(['jwt.auth', 'check.self'])->get('me/messages', 'MeController@getMessages');
+Route::middleware(['jwt.auth', 'check.self'])->get('me/points', 'MeController@getPoints');
+Route::middleware(['jwt.auth', 'check.self'])->get('me/addresses', 'MeController@getAddresses');
+Route::middleware(['jwt.auth', 'check.self'])->get('me/footprints', 'MeController@getFootprints');
+Route::middleware(['jwt.auth', 'check.self'])->get('me/bills', 'MeController@getBills');
+
+Route::middleware(['jwt.auth', 'check.self'])->get('me/message/{id}', 'MeController@getMessage');
 // user center
 
 Route::middleware(['jwt.auth', 'check.self'])->post('me/profile', 'MeController@updateProfile');
@@ -90,6 +98,10 @@ Route::middleware(['jwt.auth', 'check.self'])->post('me/address/create', 'MeCont
 Route::middleware(['jwt.auth', 'check.self'])->post('me/address/update', 'MeController@updateAddress');
 Route::middleware(['jwt.auth', 'check.self'])->post('me/address/delete', 'MeController@deleteAddress');
 Route::middleware(['jwt.auth', 'check.self'])->post('me/address/default', 'MeController@setDefaultAddress');
+
+# message
+Route::middleware(['jwt.auth', 'check.self'])->post('me/message/read', 'MeController@updateMessageStatus');
+Route::middleware(['jwt.auth', 'check.self'])->post('me/message/delete', 'MeController@deleteMessage');
 
 # footprint
 Route::middleware(['jwt.auth', 'check.self'])->post('me/footprint/create', 'MeController@addFootprint');
@@ -103,10 +115,13 @@ Route::middleware(['jwt.auth', 'check.self'])->post('me/order/delete', 'MeContro
 
 # cart
 Route::middleware(['jwt.auth', 'check.self'])->post('me/cart/add', 'MeController@addCartItem');
+Route::middleware(['jwt.auth', 'check.self'])->post('me/cart/delete', 'MeController@deleteCartItem');
+Route::middleware(['jwt.auth', 'check.self'])->post('me/cart/alter', 'MeController@alterCartItem');
+Route::middleware(['jwt.auth', 'check.self'])->get('me/cart/all', 'MeController@getCartItems');
 // 订单详情
 Route::get('orders/{id}', 'OrderController@show');
 
 // test
 Route::get('categories/{id}', 'CategoryController@show');
-Route::post('test', 'ProductController@test');
+Route::get('test', 'MeController@test');
 

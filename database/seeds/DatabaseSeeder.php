@@ -33,9 +33,10 @@ class DatabaseSeeder extends Seeder
 
         // $this->call(FavoritesTableSeeder::class);
         // $this->call(FootprintsTableSeeder::class);
-        $this->call(OrdersTableSeeder::class);
-        $this->call(ReviewsTableSeeder::class);
-        $this->call(TagsTableSeeder::class);
+        // $this->call(OrdersTableSeeder::class);
+        // $this->call(ReviewsTableSeeder::class);
+        // $this->call(TagsTableSeeder::class);
+        $this->call(PointsTableSeeder::class);
 
 
     }

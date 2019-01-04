@@ -59,26 +59,44 @@ class ProductController extends Controller
         if ($sort == 'priceup') {
             $sort = 'current_price';
             $order = 'ASC';
-        }else if ($sort == 'pricedown') {
+        } else if ($sort == 'pricedown') {
             $sort = 'current_price';
             $order = 'DESC';
         }
-
-        $div=['delivery'];
-        if($filter==='nextday') {
-            $div = ['delivery', '=',1];
+        $cw = [];
+        if($categories) {
+            $cw = 
         }
         if ($kw) {
+            $w = [];
             $qq = ['name', 'like', '%' . $kw . '%'];
-            $builder = Product::where([$qq, $div])
-                ->orWhere([ ['digest', 'like', '%' . $kw . '%'], $div ]);
+            array_push($w, $qq);
+            $w2 = [];
+            array_push($w2, ['digest', 'like', '%' . $kw . '%']);
+            if ($filter == 'nextday') {
+                array_push($w,  ['delivery', '=', 1]);
+                array_push($w, ['delivery', '=', 1]);
+            }
+            $builder = Product::where($w)
+                ->orWhere($w2);
         } else {
-            $builder = Product::where(['id', $div]);
+            if ($filter == 'nextday') {
+                $div = ['delivery', '=', 1];
+            }
+            $w = [];
+            array_push($w,['id', '>', 0]);
+            if ($filter == 'nextday') {
+                $div = ['delivery', '=', 1];
+                array_push($w, $div);
+            }
+            $builder = Product::where($w);
         }
+        // return [$div, $qq];
         $ps = $builder->orderBy($sort, $order)
-            ->skip($count * ($page - 1))
-            ->limit($count)
-            ->get();
+            ->paginate(8);
+        // ->skip($count * ($page - 1))
+        // ->limit($count)
+        // ->get();
 
         return $ps;
     }
@@ -92,13 +110,14 @@ class ProductController extends Controller
         // Product::f
 
     }
-    public function test(Request $req){
+    public function test(Request $req)
+    {
         // Product::where(['name', 'like', '%a%']);
         $items = $req->input('items');
         $i1 = $items[0];
         $i1['price'] = 30;
         $items[0]['sdf'] = 20;
-        for ($i=0; $i < count($items); $i++) { 
+        for ($i = 0; $i < count($items); $i++) {
             $items[$i]['price'] = 30;
         }
         // foreach ($items as $item) {

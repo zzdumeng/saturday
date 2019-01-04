@@ -34,31 +34,52 @@ class User extends Authenticatable
         return $this->hasMany('App\Models\Point');
     }
     public function orders() {
-        return $this->hasMany('App\Models\Order')->with('items')->paginate(10);
+        return $this->hasMany('App\Models\Order');
+    }
+    public function cartitems() {
+        return $this->hasMany('App\Models\CartItem');
+    }
+    public function getPagedOrdersAttribute() {
+        return $this->orders()->with('items')->paginate(10);
     }
     public function messages() {
         return $this->hasMany('App\Models\Message');
     }
-    public function pagedMessages() {
+    public function getPagedMessagesAttribute() {
         return $this->hasMany('App\Models\Message')->paginate(10);
-
+    }
+    public function getPagedPointsAttribute() {
+        return $this->points()->paginate(10);
     }
 
     public function footprints() {
-        return $this->hasMany('App\Models\Footprint')->with('product')->paginate(10);
+        return $this->hasMany('App\Models\Footprint')->with('product');
+    }
+    public function getPagedFootprintsAttribute() {
+        return $this->footprints()->paginate(6);
     }
     public function bills() {
-        return $this->hasMany('App\Models\Bill')->with('billtype')->paginate(10);
+        return $this->hasMany('App\Models\Bill')->with('billtype');
     }
 
+    public function getPagedBillsAttriute() {
+        return $this->bills()->paginate(10);
+    }
     /**
      * user's money can be get from bills
      */
     public function getCurrentMoneyAttribute() {
-        return $this->bills()->sort('created_at', 'DESC')->first()->balance || 0;
+        $bill = $this->bills()->orderByDesc('created_at')->first();
+        if($bill) return $bill->balance;
+        return 0;
     }
     public function getCurrentPointsAttribute() {
-        return $this->points()->sort('created_at', 'DESC')->first()->current || 0;
+        $first = $this->points()->orderByDesc('created_at' )->first();
+        if($first) {
+            return $first->current;
+        }
+        return 0;
+        // return 3;
     }
 
 }

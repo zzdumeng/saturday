@@ -35,6 +35,44 @@ class ProductController extends Controller
         // return $rs;
         return $rs->paged_reviews;
     }
+    public function search2(Request $req)
+    {
+
+        $kw = $req->query('q');
+        $query = Product::query();
+        if ($kw) {
+            $query->orWhere('name', 'like', '%' . $kw . '%');
+            $query->orWhere('digest', 'like', '%' . $kw . '%');
+        }
+        // categories
+        $cs = $req->input('categories');
+        if ($cs) {
+            $query->join('category_product', 'category_product.product_id', '=', 'products.id')
+                ->whereIn('category_product.category_id', $cs);
+        }
+
+        $sort = $req->query('sort', 'sales');
+        $filter = $req->query('filter', 'all');
+        $order = 'DESC';
+
+        // if($sort!='priceup' && $sort != 'pricedown') {
+        //     $query->orderBy($sort, $order);
+        // }
+
+        if ($sort == 'priceup') {
+            $order = 'ASC';
+        } else if ($sort == 'pricedown') {
+            $order = 'DESC';
+        }
+        if ($sort == 'priceup' || $sort == 'pricedown') {
+            $query->orderByRaw('specs->"$[0].current_price" '.$order );
+        } else {
+            $query->orderBy($sort, $order);
+        }
+
+        $result = $query->paginate(8);
+        return $result;
+    }
     /**
      * The query may cantains :
      * q? :: the keyword to search
@@ -64,9 +102,9 @@ class ProductController extends Controller
             $order = 'DESC';
         }
         $cw = [];
-        if($categories) {
-            $cw = 
-        }
+        // if($categories) {
+        //     $cw =
+        // }
         if ($kw) {
             $w = [];
             $qq = ['name', 'like', '%' . $kw . '%'];
@@ -74,7 +112,7 @@ class ProductController extends Controller
             $w2 = [];
             array_push($w2, ['digest', 'like', '%' . $kw . '%']);
             if ($filter == 'nextday') {
-                array_push($w,  ['delivery', '=', 1]);
+                array_push($w, ['delivery', '=', 1]);
                 array_push($w, ['delivery', '=', 1]);
             }
             $builder = Product::where($w)
@@ -84,7 +122,7 @@ class ProductController extends Controller
                 $div = ['delivery', '=', 1];
             }
             $w = [];
-            array_push($w,['id', '>', 0]);
+            array_push($w, ['id', '>', 0]);
             if ($filter == 'nextday') {
                 $div = ['delivery', '=', 1];
                 array_push($w, $div);

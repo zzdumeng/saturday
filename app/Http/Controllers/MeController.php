@@ -281,8 +281,10 @@ class MeController extends Controller
         // create a new cart item
         $user = auth()->user();
         $item = CartItem::create(['user_id' => $user->id,
-            'product_id' => $req->input('product_id')]);
-        return $item;
+            'product_id' => $req->input('item.product_id'),
+            'quantity' => $req->input('item.quantity'),
+            'spec' => $req->input('item.spec')]);
+        return ['id' => $item->id];
     }
     public function deleteCartItem(Request $req)
     {

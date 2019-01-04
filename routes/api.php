@@ -54,7 +54,7 @@ Route::get('/province', function (Request $req) {
 });
 Route::get('/products/{id}', 'ProductController@show');
 Route::get('/products/{id}/reviews', 'ProductController@getReviews');
-Route::get('/search', 'ProductController@search');
+Route::get('/search', 'ProductController@search2');
 
 Route::get('/home', 'HomeController');
 // Route::get('/reviews/{id}', 'ReviewController@show');

@@ -30,6 +30,9 @@ class Product extends Model
     {
         $this->attributes['images'] = json_encode($v);
     }
+    // public function getSpecsAttribute($v) {
+    //     return \json_decode($v);
+    // }
     public function setSpecsAttribute($v)
     {
         $this->attributes['specs'] = json_encode($v);

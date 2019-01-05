@@ -12,7 +12,10 @@ class Seller extends Model
     public function products() {
         return $this->hasMany('product');
     }
-
+    public function getFeatureProductAttribute() {
+        return $this->products()->first();
+        
+    }
     public function addresses() {
         return $this->morphMany('App\Models\Address', 'addressable');
     }

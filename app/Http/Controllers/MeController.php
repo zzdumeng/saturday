@@ -6,6 +6,7 @@ use App\Models\Address;
 use App\Models\CartItem;
 use App\Models\Footprint;
 use App\Models\Message;
+use App\Models\Favorite;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -34,7 +35,7 @@ class MeController extends Controller
     }
     public function test(Request $req)
     {
-        return $req->input('c');
+        return User::find(1)->favorites;
         // $query = User::find(1)
         //     ->orders()->with(['items', 'seller'])->where('status', '=', $req->input('status'));
     }
@@ -303,4 +304,30 @@ class MeController extends Controller
         return CartItem::where('id', $id)->update(['quantity' => $quantity ]);
     }
 
+    // favorites
+    public function getFavorites() {
+        return User::find(auth()->user()->id)->favorites;
+    }
+    /**
+     * {favorites: [product_id]}
+     */
+    public function addFavorites(Request $req) {
+        $favs = $req->input('favorites');
+        $user= auth()->user();
+        $result = [];
+        foreach ($favs as $fav ) {
+            Favorite::create(['product_id' => $fav,
+            'user_id' => $user->id]);
+        }
+        return ;
+    }
+    /** 
+     * {favorites: [id, id,]}
+     * note: and are product ids 
+     */
+    public function deleteFavorites(Request $req) {
+        $pids = $req->input('favorites');
+        Favorite::whereIn('product_id', $pids)->delete();
+        return ;
+    }
 }

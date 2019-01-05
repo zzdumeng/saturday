@@ -13,7 +13,7 @@ class Category extends Model
     }
 
     public function getFirstRowAttribute() {
-        return $this->products()->limit(4)->get();
+        return $this->products()->with('seller')->limit(4)->get();
     }
     public function getPagedProductsAttribute() {
         return $this->products()->paginate(12);

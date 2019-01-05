@@ -85,6 +85,7 @@ Route::middleware(['jwt.auth', 'check.self'])->get('me/points', 'MeController@ge
 Route::middleware(['jwt.auth', 'check.self'])->get('me/addresses', 'MeController@getAddresses');
 Route::middleware(['jwt.auth', 'check.self'])->get('me/footprints', 'MeController@getFootprints');
 Route::middleware(['jwt.auth', 'check.self'])->get('me/bills', 'MeController@getBills');
+Route::middleware(['jwt.auth', 'check.self'])->get('me/favorites', 'MeController@getFavorites');
 
 Route::middleware(['jwt.auth', 'check.self'])->get('me/message/{id}', 'MeController@getMessage');
 // user center
@@ -113,6 +114,10 @@ Route::middleware(['jwt.auth', 'check.self'])->post('me/order/cancel', 'MeContro
 Route::middleware(['jwt.auth', 'check.self'])->post('me/order/confirm', 'MeController@confirmOrder');
 Route::middleware(['jwt.auth', 'check.self'])->post('me/order/delete', 'MeController@deleteOrder');
 
+# favorite
+Route::middleware(['jwt.auth', 'check.self'])->post('me/favorite/add', 'MeController@addFavorites');
+Route::middleware(['jwt.auth', 'check.self'])->post('me/favorite/delete', 'MeController@deleteFavorites');
+
 # cart
 Route::middleware(['jwt.auth', 'check.self'])->post('me/cart/add', 'MeController@addCartItem');
 Route::middleware(['jwt.auth', 'check.self'])->post('me/cart/delete', 'MeController@deleteCartItem');
@@ -121,7 +126,9 @@ Route::middleware(['jwt.auth', 'check.self'])->get('me/cart/all', 'MeController@
 // 订单详情
 Route::get('orders/{id}', 'OrderController@show');
 
+// city
+Route::get('city', 'CityController');
 // test
 Route::get('categories/{id}', 'CategoryController@show');
-Route::get('test', 'MeController@test');
+Route::get('test', 'CityController@test');
 

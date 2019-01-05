@@ -39,6 +39,9 @@ class User extends Authenticatable
     public function cartitems() {
         return $this->hasMany('App\Models\CartItem');
     }
+    public function favorites() {
+        return $this->belongsToMany('App\Models\Product', 'favorites');
+    }
     public function getPagedOrdersAttribute() {
         return $this->orders()->with('items')->paginate(10);
     }

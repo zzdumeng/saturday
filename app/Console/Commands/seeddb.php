@@ -3,6 +3,8 @@
 namespace App\Console\Commands;
 
 use App\Models\Point;
+use App\Models\Seller;
+use App\Models\Address;
 use Illuminate\Console\Command;
 
 class seeddb extends Command
@@ -40,14 +42,15 @@ class seeddb extends Command
     {
         //
         $faker = \Faker\Factory::create();
-        $points = Point::all()->toArray();
-
-        for ($i=1; $i <= 440; $i++) { 
-            Point::where('id', $i)
-            ->update([
-                'created_at' => $faker->date(),
-                'updated_at' => $faker->date(),
-            ]);
+        $addrs = Address::where('addressable_type', 'sellers')
+        ->get()
+        ->toArray();
+        $x = 1;
+        foreach ($addrs as $add ) {
+            Address::where('id', $add['id'])
+            ->update(['addressable_id' => $x]);
+            $x = $x+1;
+            echo $x;
         }
         // Point::where('id', '>', 0)
         //     ->update(['created_at' =>

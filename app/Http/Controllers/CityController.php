@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Seller;
+use App\Models\Address;
 use Illuminate\Http\Request;
 
 class CityController extends Controller
@@ -22,6 +23,7 @@ class CityController extends Controller
 
     }
     public function test() {
-        return Seller::with('addresses')->find(1);
+        // return Seller::with('addresses')->find(1)->addresses;
+        return Address::find(1)->addressable;
     }
 }

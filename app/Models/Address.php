@@ -11,4 +11,14 @@ class Address extends Model
     public function addressable() {
         return $this->morphTo();
     }
+
+    public function province() {
+        return $this->belongsTo('App\Models\Province');
+    }
+    public function region() {
+        return $this->belongsTo('App\Models\Region');
+    }
+    public function city() {
+        return $this->belongsTo('App\Models\City');
+    }
 }

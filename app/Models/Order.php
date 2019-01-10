@@ -9,6 +9,7 @@ class Order extends Model
     //
     // protected $table = 'order';
 
+    protected $fillable = ['user_id', 'address_id', 'status', 'type', ];
     public function products() {
         return $this->hasManyThrough('App\Models\Product', 'orderitem');
     }

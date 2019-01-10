@@ -1,12 +1,12 @@
 <?php
 namespace App\Http\Controllers;
+
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Validator;
-use JWTFactory;
-use JWTAuth;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use JWTAuth;
+use Validator;
 
 class APILoginController extends Controller
 {
@@ -14,14 +14,14 @@ class APILoginController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'mobile' => 'required|digits:11',
-            'password'=> 'required'
+            'password' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json($validator->errors());
         }
         $credentials = $request->only('mobile', 'password');
         try {
-            if (! $token = JWTAuth::attempt($credentials)) {
+            if (!$token = JWTAuth::attempt($credentials)) {
                 return response()->json(['error' => 'invalid_credentials'], 401);
             }
         } catch (JWTException $e) {
@@ -29,10 +29,10 @@ class APILoginController extends Controller
         }
         // return response()->json(compact('token'));
         $user = auth()->user();
-        $u = User::find($user->id);
-        $user['token']=$token;
-        $user['money'] = $u->current_money;
-        $user['points'] = $u->current_points;
-        return response()->json($user);
+        $u = User::with('addresses')->find($user->id);
+        $u['token'] = $token;
+        $u['money'] = $u->current_money;
+        $u['points'] = $u->current_points;
+        return response()->json($u);
     }
 }

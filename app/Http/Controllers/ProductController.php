@@ -51,14 +51,23 @@ class ProductController extends Controller
                 ->whereIn('category_product.category_id', $cs);
         }
 
-        $sort = $req->query('sort', 'sales');
-        $filter = $req->query('filter', 'all');
+        $sort = $req->query('sort') ?? 'sales';
+        $filter = $req->query('filter') ?? 'all';
+        if($filter=='next') {
+            $query->where('delivery', 1);
+        }
+
+
+        if($sort == 'sales')
+        $order = 'DESC';
+        if($sort == 'rating')
         $order = 'DESC';
 
         // if($sort!='priceup' && $sort != 'pricedown') {
         //     $query->orderBy($sort, $order);
         // }
-
+        // return [$sort, $filter];
+        
         if ($sort == 'priceup') {
             $order = 'ASC';
         } else if ($sort == 'pricedown') {

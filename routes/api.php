@@ -57,6 +57,7 @@ Route::get('/products/{id}/reviews', 'ProductController@getReviews');
 Route::get('/search', 'ProductController@search2');
 
 Route::get('/home', 'HomeController');
+Route::get('/category', 'CategoryController');
 // Route::get('/reviews/{id}', 'ReviewController@show');
 // Route::get('/reviews/{id}', 'ReviewController@show');
 
@@ -113,6 +114,7 @@ Route::middleware(['jwt.auth', 'check.self'])->post('me/order/pay', 'MeControlle
 Route::middleware(['jwt.auth', 'check.self'])->post('me/order/cancel', 'MeController@cancelOrder');
 Route::middleware(['jwt.auth', 'check.self'])->post('me/order/confirm', 'MeController@confirmOrder');
 Route::middleware(['jwt.auth', 'check.self'])->post('me/order/delete', 'MeController@deleteOrder');
+Route::middleware(['jwt.auth', 'check.self'])->get('me/order/get', 'MeController@getOrder');
 
 # favorite
 Route::middleware(['jwt.auth', 'check.self'])->post('me/favorite/add', 'MeController@addFavorites');
@@ -130,5 +132,5 @@ Route::get('orders/{id}', 'OrderController@show');
 Route::get('city', 'CityController');
 // test
 Route::get('categories/{id}', 'CategoryController@show');
-Route::get('test', 'CityController@test');
+Route::get('test', 'MeController@test');
 

@@ -13,4 +13,8 @@ class CategoryController extends Controller
         // return var_dump($c->parentCategory);
         return ['parent'=>$c->parentCategory, 'root' => $c->root_category];
     }
+
+    public function __invoke() {
+        return Category::with('categories')->where('level', 0)->get();
+    }
 }

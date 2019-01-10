@@ -7,6 +7,8 @@ use App\Models\CartItem;
 use App\Models\Footprint;
 use App\Models\Message;
 use App\Models\Favorite;
+use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -32,12 +34,6 @@ class MeController extends Controller
             $query = $query->whereIn('status', $status);
         }
         return $query->paginate(10);
-    }
-    public function test(Request $req)
-    {
-        return User::find(1)->favorites;
-        // $query = User::find(1)
-        //     ->orders()->with(['items', 'seller'])->where('status', '=', $req->input('status'));
     }
     public function getMessages(Request $req)
     {
@@ -203,7 +199,7 @@ class MeController extends Controller
         $user = auth()->user();
         try {
             User::where('id', $user->id)->update(['default_address' => $id]);
-            return [success => 1];
+            return ['success' => 1];
         } catch (Exception $ex) {
             return ['error' => 1];
         }
@@ -213,8 +209,9 @@ class MeController extends Controller
     public function addFootprint(Request $req)
     {
         $user = auth()->user();
-        return Footprint::create(['user_id' => $user->id,
+        $f = Footprint::create(['user_id' => $user->id,
             'product_id' => $req->input('product_id')]);
+        return ['id' => $f->id];
     }
     public function deleteFootprint(Request $req)
     {
@@ -225,23 +222,36 @@ class MeController extends Controller
     // order
     public function addOrder(Request $req)
     {
+        // items: [{product_id}]
         $user = auth()->user();
         $items = $req->input('items');
+        // $ids = CartItem::whereIn('id', $items);
         $pids = [];
         foreach ($items as $item) {
             array_push($pids, $item['product_id']);
         }
 
         $order = Order::create(['user_id' => $user->id,
-            status => 0]);
-        $order->items()->saveMany(
-            $items
-        );
+            'address_id' => $req->input('address_id'),
+            'status' => 0,
+            'type' => 0]);
+        foreach($items as $i) {
+            $x = new OrderItem();
+            $x->order_id = $order->id;
+            $x->spec = $i['spec'];
+            $x->product_id = $i['product_id'];
+            $x->quantity = $i['quantity'];
+            $x->price = $i['price'];
+            $x->save();
+            //   OrderItem::create(['user_id' => $user->id,
+            // 'spec' => $i['spec'],
+            // 'quantity' => $i['quantity']);
+        }
         // and remove the items in cartitems
         CartItem::where('user_id', '=', $user->id)
             ->whereIn('product_id', $pids)
             ->delete();
-        return $order;
+        return ['id' => $order->id];
     }
 
     public function payOrder(Request $req)
@@ -269,11 +279,17 @@ class MeController extends Controller
         $r = Order::where('id', $req->input('order_id'))
             ->update(['status' => 4]);
         return $r;
+
+    }
+
+    public function getOrder(Request $req)  {
+        $id = $req->input('id');
+        return Order::with(['items', 'seller'])->find($id);
     }
     // cart
     public function getCartItems(Request $req)
     {
-        $user = User::find(auth()->user()->id)->with('cartitems');
+        $user = User::find(auth()->user()->id);
         return $user->cartitems;
     }
     public function addCartItem(Request $req)
@@ -329,5 +345,12 @@ class MeController extends Controller
         $pids = $req->input('favorites');
         Favorite::whereIn('product_id', $pids)->delete();
         return ;
+    }
+
+    public function test(Request $req)
+    {
+        return Order::with(['seller', 'items'])->find($req->input('id'));
+        // $query = User::find(1)
+        //     ->orders()->with(['items', 'seller'])->where('status', '=', $req->input('status'));
     }
 }

@@ -19,6 +19,12 @@ class Category extends Model
         return $this->products()->paginate(12);
     }
 
+    public function categories() {
+        if($this->level<2)
+        return $this->hasMany('App\Models\Category', 'category_id')->with('categories');
+    }
+
+
     public function parentCategory() {
         return $this->belongsTo('App\Models\Category', 'category_id');
     }

@@ -28,7 +28,7 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
     public function addresses() {
-        return $this->morphMany('App\Models\Address', 'addressable');
+        return $this->morphMany('App\Models\Address', 'addressable')->with(['province', 'region', 'city']);
     }
     public function points() {
         return $this->hasMany('App\Models\Point');
@@ -37,7 +37,7 @@ class User extends Authenticatable
         return $this->hasMany('App\Models\Order');
     }
     public function cartitems() {
-        return $this->hasMany('App\Models\CartItem');
+        return $this->hasMany('App\Models\CartItem')->with('product');
     }
     public function favorites() {
         return $this->belongsToMany('App\Models\Product', 'favorites');
